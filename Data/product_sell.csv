@@ -1,0 +1,23 @@
+id,name,company_name,price,amount
+0,IPhone 12,Apple,21000000,8
+1,IPhone 12 Pro Max,Apple,32990000,10
+2,IPhone 12 Pro,Apple,29000000,50
+3,IPhone 12 mini,Apple,16990000,65
+4,IPhone XR,Apple,13000000,70
+5,IPhone SE (2020),Apple,12990000,100
+6,IPhone 11,Apple,21000000,18
+7,Samsung Galaxy Z Fold3 5G,Samsung,45000000,30
+8,Samsung Galaxy A52 5G,Samsung,11990000,44
+9,Samsung Galaxy Z Flip3 5G,Samsung,28000000,27
+10,Samsung Galaxy S21 5G,Samsung,25000000,9
+11,Samsung Galaxy A52,Samsung,10100000,100
+12,Samsung Galaxy A51,Samsung,7600000,150
+13,Samsung Galaxy A22,Samsung,5700000,90
+14,Samsung Galaxy A02,Samsung,2700000,35
+15,Oppo Reno6 Z 5G,Oppo,9800000,29
+16,Oppo A74,Oppo,7700000,7
+17,Oppo Reno4 Pro,Oppo,11000000,24
+18,Oppo A74 5G,Oppo,8100000,63
+19,Oppo A93,Oppo,7100000,89
+20,Oppo A15s,Oppo,4200000,101
+21,Vivo Y12s,Vivo,4000000,24
