@@ -30,6 +30,7 @@
 - Lưu trữ dạng file csv. Có thể thêm sửa, xóa bằng excel (tuy nhiên dùng cách này không kiểm tra được điều kiện nhập)
 
 ## Các chạy chương trình
+- Ngôn ngữ Python 3.8
 - Tải các package cần thiết:
 ```$pip install -r requirements.txt``
 - Linux/Mac Os:
