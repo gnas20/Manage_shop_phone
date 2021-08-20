@@ -438,6 +438,11 @@ class ManageShop:
     
     @staticmethod
     def loop4():
+        ManageShop.df_product_info_origin.to_csv("Data/product_info.csv", index=False)
+        ManageShop.df_product_sells.to_csv("Data/product_sell.csv", index=False)
+        ManageShop.df_posts.to_csv("Data/posts.csv", index=False)
+        f = open("Data/company_mobilephones.txt", 'w')
+        f.write(",".join(ManageShop.company_names))
         print("Data has been updated!")
     
     @staticmethod

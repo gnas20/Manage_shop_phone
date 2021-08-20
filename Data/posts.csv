@@ -1,6 +1,6 @@
 id,name_customer,address,phone_number,name_product,amount,price,status,date
-0,Phuong Nguyen,21 Le Van Sy/q3/tphcm,0553661523,Vivo Y12s,1,4000000,PAID,14/6/2021
-1,Phuong Nguyen,21 Le Van Sy/q3/tphcm,0553661523,IPhone 11,1,21000000,PAID,20/7/2021
-2,Phuong Nguyen,21 Le Van Sy/q3/tphcm,0553661523,Samsung Galaxy Z Fold3 5G,1,45000000,PAID,25/7/2021
-3,Loan Anh,Dong Da/Hanoi,0553261829,IPhone 11,1,21000000,PAID,26/7/2021
-4,Phuc Du,21 Binh Thoi/Tan Binh/tphcm,099371023,Oppo A93,2,7100000,DELIVERING,15/8/2021
+0,Phuong Nguyen,21 Le Van Sy/q3/tphcm,553661523,Vivo Y12s,1,4000000,PAID,14/6/2021
+1,Phuong Nguyen,21 Le Van Sy/q3/tphcm,553661523,IPhone 11,1,21000000,PAID,20/7/2021
+2,Phuong Nguyen,21 Le Van Sy/q3/tphcm,553661523,Samsung Galaxy Z Fold3 5G,1,45000000,PAID,25/7/2021
+3,Loan Anh,Dong Da/Hanoi,553261829,IPhone 11,1,21000000,PAID,26/7/2021
+4,Phuc Du,21 Binh Thoi/Tan Binh/tphcm,99371023,Oppo A93,2,7100000,DELIVERING,15/8/2021
