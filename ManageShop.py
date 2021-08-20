@@ -35,7 +35,6 @@ class ManageShop:
         print("6. Lọc danh sách theo hãng")
         print("7. Thêm điện thoại")
         print("8. Xóa điện thoại")
-        print("9. Chính sửa thông tin của điện thoại")
         print("0. exit")
         
     @staticmethod
@@ -85,44 +84,82 @@ class ManageShop:
     
     @staticmethod
     def add_phone():
-        product_sell = ProductSell() 
-        # name
-        print("nhập tên điện thoại: ", end='')
-        name = input()
-        product_sell.name = name
-        if name not in ManageShop.df_product_info_origin.name.unique():
-            print("Điện thoại này không có trong thông tin shop có, vui lòng thêm các thông tin khác.")
-            print("Nhập tên hãng: ", end='')
-            company_name = input()
-            product_sell.company_name = company_name
+        try:
+            product = ProductSell()
+            print("- name: ", end='')
+            product.name = input()
             
-            print("Nhập giá gốc: ")
-            origin_price = float(input())
-        else:
-            pass    
-        
-        print("Nhập giá cần bán: ", end='')
-        price = float(input())
-        product_sell.price = price
-        
-        # amount
-        print("Nhập số lượng: ", end='')
-        amount = int(input())
-        product_sell.amount = amount
-        
-        if product_sell.is_valid_info():
-            pass
-        else:
-            print("Thông tin bạn nhập không đúng định dạng!")
+            if product.name in ManageShop.df_product_sells.name.values:
+                print("Nhập số lượng cần thêm: ", end='')
+                amount = int(input())
+                ManageShop.df_product_sells.loc[ManageShop.df_product_sells.name == product.name, "amount"] += amount
+                print("Đã thêm số lượng thành công")
+            elif product.name in ManageShop.df_product_info_origin.name.values:
+                product.company_name = ManageShop.df_product_info_origin.loc[
+                    ManageShop.df_product_info_origin.name == product.name, "company_name"].values[0]
+                origin_price = ManageShop.df_product_info_origin.loc[ManageShop.df_product_info_origin.name == product.name, "price"].values[0]
+                print(f"- Giá bán (Giá gốc: {origin_price}): ", end='')
+                price = float(input())
+                product.price = price
+            
+                print("- amount: ", end='')
+                amount = int(input())
+                product.amount = amount
+            
+                product.id = int(ManageShop.df_product_info_origin.loc[ManageShop.df_product_info_origin.name == product.name, "id"].values[0])
+                
+                if product.is_valid_info():
+                    dict_info = {key[1:]: value for key, value in product.__dict__.items()}
+                    ManageShop.df_product_sells = ManageShop.df_product_sells.append(dict_info, ignore_index=True)
+                    print("Mặt hàng đã được thêm")
+                else:
+                    print(product.__dict__)
+                    print("Bạn nhập sai định dạng")  
+            else:
+                print("- company name: ", end='')
+                company_name = input()
+                if company_name not in ManageShop.company_names:
+                    print("Hãng này chưa có trong danh sách, bạn cần thêm hãng này vào.")
+                else:
+                    product.company_name = company_name
+                    print("- Giá gốc: ", end='')
+                    origin_price = float(input())
+                    
+                    print("- Giá bán: ", end='')
+                    product.price = float(input())
+                    
+                    print("- Số lượng: ", end='')
+                    product.amount = int(input())
+                    product.id = ManageShop.df_product_info_origin.id.max() + 1
+                    if product.is_valid_info():
+                        dict_info = {key[1:]: value for key, value in product.__dict__.items()}
+                        ManageShop.df_product_sells = ManageShop.df_product_sells.append(dict_info, ignore_index=True)
+                        
+                        dict_info_origin = {"id": product.id, 
+                                            "name": product.name,
+                                            "company_name": product.company_name, 
+                                            "price": origin_price}
+                        ManageShop.df_product_info_origin = ManageShop.df_product_info_origin.append(dict_info, ignore_index=True)
+                        print("Đã thêm thành công!")
+                    else:
+                        print(product.__dict__)
+                        print("Bạn nhập sai định dạng")    
+        except:
+            print("error input")
     
     
     @staticmethod
     def remove_phone():
-        pass
-    
-    @staticmethod
-    def edit_phone():
-        pass
+        print("Nhập id sản phẩm cần xóa: ", end='')
+        try:
+            id = int(input())
+            print(f"Info of post: {ManageShop.df_product_sells[ManageShop.df_product_sells.id == id].T}")
+            ManageShop.df_product_sells = ManageShop.df_product_sells.drop(
+                labels=ManageShop.df_product_sells[ManageShop.df_product_sells.id == id].index, axis=0)
+            print("Đã xóa thành công!")
+        except:
+            print("Error input")  
+        
             
     @staticmethod
     def loop1():
@@ -148,8 +185,6 @@ class ManageShop:
                     ManageShop.add_phone()
                 elif choose == 8: # Xoa dien thoai
                     ManageShop.remove_phone()
-                elif choose == 9: # Chinh sua thong tin dien thoai
-                    ManageShop.edit_phone()
                 elif choose == 0:
                     break
                 else:
@@ -187,12 +222,92 @@ class ManageShop:
     
     @staticmethod
     def edit_post():
-        pass
+        print("Nhập id đơn hàng cần chỉnh sửa: ", end='')
+        try:
+            id = int(input())
+            add_success = False
+            if id in ManageShop.df_posts.id.values:
+                post = Post()
+                post.id = id
+                print(f"Info of post: {ManageShop.df_posts[ManageShop.df_posts.id == id].T}")
+                print("--Nhập các thông tin mới--")
+                print("- name_customer: ", end='')
+                post.name_customer = input()
+                
+                print("- address: ", end='')
+                post.address = input()
+                
+                print("- phone_number: ", end='')
+                post.phone_number = input()
+                
+                while True:
+                    print("- name_product: ", end='')
+                    post.name_product = input()
+                    if post.name_product in ManageShop.df_product_sells.name.unique():
+                        break
+                    else:
+                        print("Điện thoại này không có trong danh sách bán")
+                        print("Vui lòng nhập lại")
+                
+                post.price = float(ManageShop.df_product_sells[ManageShop.df_product_sells.name == post.name_product].price)
+                
+                print("- Status(ORDERED, DELIVERING, PAID): ", end='')
+                post.status = input()
+                
+                print("-Date(Ngày/tháng/năm): ", end='')
+                post.date = input()
+                
+                print("- Amount: ", end='')
+                post.amount = int(input())
+                
+                if post.is_valid_post():
+                    # Check amount
+                    
+                    # reset amount in product_sell
+                    amount_old_post = ManageShop.df_posts[ManageShop.df_posts.id == id].amount.values[0]
+                    name_product_old_post = ManageShop.df_posts[ManageShop.df_posts.id == id].name_product.values[0]
+        
+                    ManageShop.df_product_sells.loc[ManageShop.df_product_sells.name == name_product_old_post, "amount"] += amount_old_post
+            
+                    # get new amount with new post
+                    while True:
+                        new_amount = ManageShop.df_product_sells[ManageShop.df_product_sells.name == post.name_product].amount.values[0] - post.amount
+                        print(1)
+                        if new_amount < 0:
+                            print("Kho hàng của sản phẩm này không đủ số lượng, vui lòng nhập lại amount khác")
+                        else:
+                            ManageShop.df_product_sells.loc[ManageShop.df_product_sells.name == post.name_product, "amount"] -= post.amount
+                            print(2)
+                            break
+                        print("- amount: ", end='')
+                        post.amount = int(input())
+                        
+                    dict_info = {key[1:]: value for key, value in post.__dict__.items()}
+
+                    # update post
+                    ManageShop.df_posts.loc[ManageShop.df_posts.id == post.id, list(dict_info.keys())] = dict_info.values()
+                    
+                    print("Cập nhật đơn hàng thành công!")
+                else:
+                    print("Bạn đã nhập sai định dạng")
+                    print(post.__dict__)    
+            else:
+                print("id không có trong danh sách")
+        except:
+            print("Error input!")
+    
     
     @staticmethod
     def remove_post():
-        pass
-    
+        print("Nhập id đơn hàng cần xóa: ", end='')
+        try:
+            id = int(input())
+            print(f"Info of post: {ManageShop.df_posts[ManageShop.df_posts.id == id].T}")
+            ManageShop.df_posts = ManageShop.df_posts.drop(labels=ManageShop.df_posts[ManageShop.df_posts.id == id].index, axis=0)
+            ManageShop.df_posts.id = range(0, ManageShop.df_posts.shape[0])
+            print("Đã xóa thành công và cập nhật lại id.")
+        except:
+            print("Error input")    
     
     @staticmethod
     def loop2():
@@ -253,8 +368,47 @@ class ManageShop:
             
     @staticmethod
     def check_bussiness():
-        pass
-    
+        try:
+            month, year = 1, 2000
+            while True:
+                print("- month: ", end='')
+                month = int(input())
+                if month >= 1 and month <= 12:
+                    break
+                else:
+                    print("error month: 1 <= month <= 12")
+                    
+            while True:
+                print("- year: ", end='')
+                year = int(input())
+                current_year = datetime.datetime.today().year
+                if year >= 2000 or year <= current_year:               
+                    break
+                else:
+                    print("error month: 1 <= month <= 12")
+                    
+            ManageShop.df_posts['date'] = pd.to_datetime(ManageShop.df_posts['date'], format="%d/%m/%Y")
+            ManageShop.df_posts["month"] = ManageShop.df_posts["date"].apply(lambda x: x.month)
+            ManageShop.df_posts["year"] = ManageShop.df_posts["date"].apply(lambda x: x.year)
+            ManageShop.df_posts["sum_money"] = ManageShop.df_posts.price*ManageShop.df_posts.amount
+            # revenue
+            revenue = ManageShop.df_posts[(ManageShop.df_posts.year == year) & (ManageShop.df_posts.month == month)]["sum_money"].sum()
+            
+            # profit
+            def get_origin_price_col(x):
+                return ManageShop.df_product_info_origin .loc[ManageShop.df_product_info_origin.name == x.name_product, "price"].values[0]
+
+            ManageShop.df_posts['origin_price'] = ManageShop.df_posts.apply(lambda x: get_origin_price_col(x), axis=1)
+            
+            ManageShop.df_posts["sum_money_origin"] = ManageShop.df_posts.origin_price*ManageShop.df_posts.amount
+            profit = ManageShop.df_posts[(ManageShop.df_posts.year == year) & (ManageShop.df_posts.month == month)]["sum_money_origin"].sum()
+            
+            print(f"- Doanh thu: {revenue}")
+            print(f"- Lợi nhuận: {profit}")
+            ManageShop.df_posts = ManageShop.df_posts.drop(["month", "year", "sum_money", "origin_price", "sum_money_origin"], axis=1)
+             
+        except:
+            print("error input")
     @staticmethod
     def loop3():
         system("clear")
@@ -288,6 +442,7 @@ class ManageShop:
     
     @staticmethod
     def main_loop():
+
         while True:
             ManageShop.display_main_menu()
             

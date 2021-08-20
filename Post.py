@@ -2,7 +2,7 @@ from MyFeatures import *
 import numbers
 from datetime import date, datetime
 class Post:
-    def __init__(self, id, name_customer, address, phone_number, name_product, amount, price, stt='ORDERED', date=None):
+    def __init__(self, id='', name_customer='', address='', phone_number='', name_product='', amount='', price='', stt='', date=None):
         self._id = id
         self._name_customer = name_customer
         self._address = address
@@ -133,5 +133,10 @@ class Post:
             try:
                 self._date = datetime.strptime(str_date, "%d/%m/%Y")
                 return True
-            except:
+            except:     
                 return False
+            
+    
+    def is_valid_post(self):
+        return '' not in self.__dict__.values()
+
